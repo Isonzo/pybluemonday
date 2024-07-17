@@ -14,6 +14,12 @@ def run_command(command, env=None):
     print(result.stdout)
     return result
 
+# Ensure cffi is installed
+try:
+    import cffi
+except ImportError:
+    run_command(["pip", "install", "cffi~=1.1"])
+
 # Install Go for OSX or Linux if needed
 if uname.system == "Darwin":
     os.system("./scripts/setup-macos.sh")
@@ -45,7 +51,6 @@ run_command(["make", "clean"], env=env)
 run_command(["make", "so"], env=env)
 
 # Build the CFFI headers
-run_command(["pip", "install", "cffi~=1.1"], env=env)
 run_command(["make", "ffi"], env=env)
 
 with open("pybluemonday/__init__.py", "r", encoding="utf8") as f:
